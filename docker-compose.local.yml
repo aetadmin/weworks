@@ -1,0 +1,31 @@
+version: "3.1"
+
+services:
+  weworks_postgres:
+    container_name: weworks_postgres
+    image: postgres:latest
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: weworks
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: weworks
+
+  weworks:
+    container_name: weworks
+    build: "."
+    ports:
+      - 3000:3000
+      - 5001:5003
+    restart: always
+    depends_on:
+      - weworks_postgres
+    environment:
+      DB_USERNAME: "weworks"
+      DB_PASSWORD: "1234"
+      DB_HOST: "weworks_postgres"
+      SECRET: 'weworks4life'
+      
+volumes: 
+ pgdata:
