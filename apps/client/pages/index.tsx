@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { getCookie } from "cookies-next";
 import moment from "moment";
 import { useUser } from "../store/session";
+import Wallet from "../components/Wallet";
 
 export default function Home() {
   const router = useRouter();
@@ -86,14 +87,14 @@ export default function Home() {
   }
 
   const stats = [
-    { name: "Open Issues", stat: openTickets, href: "/issues" },
+    { name: "Open Taskes", stat: openTickets, href: "/issues" },
     {
-      name: "Completed Issues",
+      name: "Completed Taskes",
       stat: completedTickets,
       href: "/issues?filter=closed",
     },
     {
-      name: "Unassigned Issues",
+      name: "Unsettled Taskes",
       stat: unassigned,
       href: "/issues?filter=unassigned",
     },
@@ -118,13 +119,7 @@ export default function Home() {
     <div className="flex flex-col xl:flex-row p-8 justify-center w-full">
       <div className="w-full xl:w-[70%] max-w-5xl">
         <div className="block sm:hidden mb-4">
-          {user.isAdmin && (
-            <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
-              <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
-                Version {process.env.NEXT_PUBLIC_CLIENT_VERSION}
-              </span>
-            </Link>
-          )}
+          {user.isAdmin && <Wallet />}
         </div>
         {!loading && (
           <>

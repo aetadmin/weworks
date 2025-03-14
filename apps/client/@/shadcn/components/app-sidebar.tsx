@@ -50,13 +50,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
     teams: [
       {
-        name: "Peppermint",
-        plan: `version: ${process.env.NEXT_PUBLIC_CLIENT_VERSION}`,
+        name: "WeWorks",
+        plan: `Trust Score: ${process.env.TRUST_SCORE}`,
       },
     ],
     navMain: [
       {
-        title: "New Issue",
+        title: "New Task",
         url: ``,
         icon: ListPlus,
         isActive: location.pathname === "/" ? true : false,
@@ -78,7 +78,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         internal: true,
       },
       {
-        title: "Issues",
+        title: "Tasks",
         url: `/${locale}/issues`,
         icon: SquareKanban,
         isActive: location.pathname === "/issues" ? true : false,
@@ -171,9 +171,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <img src="/favicon/favicon-32x32.png" className="size-4" />
           </div>
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold text-xl">Peppermint</span>
+            <span className="truncate font-semibold text-xl">
+            <span className="logo-front">We</span><span className="logo-back">Works</span>
+            </span>
             <span className="truncate text-xs">
-              version: {process.env.NEXT_PUBLIC_CLIENT_VERSION}
+              Trust Score: {process.env.TRUST_SCORE}
             </span>
           </div>
         </div>

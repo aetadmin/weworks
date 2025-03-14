@@ -1,16 +1,16 @@
 const seoConfig = {
-  metadataBase: new URL("https://peppermint.sh"),
+  metadataBase: new URL("https://weworks.com.au"),
   title: {
-    template: "Peppermint",
+    template: "WeWorks",
     default:
-      "Peppermint - Revolutionizing Customer Support for Rapid Resolutions. Your Premier Zendesk Alternative.",
+      "WeWorks - Revolutionizing Customer Support for Rapid Resolutions. Your Premier Zendesk Alternative.",
   },
   description:
-    "Experience Peppermint's revolutionary approach to customer support, ensuring swift resolutions. Discover your ultimate alternative to Zendesk.",
+    "Experience WeWorks' revolutionary approach to customer support, ensuring swift resolutions. Discover your ultimate alternative to Zendesk.",
   themeColor: "#F6E458",
   openGraph: {
     images: "/og-image.png",
-    url: "https://peppermint.sh",
+    url: "https://weworks.com.au",
   },
   manifest: "/site.webmanifest",
   icons: [

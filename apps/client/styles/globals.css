@@ -560,6 +560,14 @@
   color: var(--foreground) !important;
 }
 
+.logo-front {
+  color: #041526;
+}
+
+.logo-back {
+  color: #58C2F8;
+}
+
 /* Add these styles to hide scrollbars site-wide */
 html {
   overflow: hidden;
