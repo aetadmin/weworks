@@ -113,12 +113,12 @@ export function requirePermission(
 // Usage examples:
 /*
 // Check single permission
-if (hasPermission(user, 'issue::create')) {
+if (hasPermission(user, 'task::create')) {
   // Allow create ticket
 }
 
 // Check multiple permissions (all required)
-if (hasPermission(user, ['issue:update', 'issue:assign'])) {
+if (hasPermission(user, ['task:update', 'task:assign'])) {
   // Allow ticket update and assignment
 }
 
@@ -129,13 +129,13 @@ if (hasPermission(user, ['user:manage', 'role:manage'], false)) {
 
 // Use as middleware
 router.post('/tickets', 
-  requirePermission('issue::create'),
+  requirePermission('task::create'),
   ticketController.create
 );
 
 // Use as middleware with multiple permissions
 router.put('/tickets/:id/assign', 
-  requirePermission(['issue:update', 'issue:assign']),
+  requirePermission(['task:update', 'task:assign']),
   ticketController.assign
 );
 */

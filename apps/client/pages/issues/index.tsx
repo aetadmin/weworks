@@ -5,6 +5,7 @@ import ViewSettings from "@/shadcn/components/tickets/ViewSettings";
 import { useTicketActions } from "@/shadcn/hooks/useTicketActions";
 import { useTicketFilters } from "@/shadcn/hooks/useTicketFilters";
 import { useTicketView } from "@/shadcn/hooks/useTicketView";
+import { Button } from "@/shadcn/ui/button";
 import { getCookie } from "cookies-next";
 import { Loader } from "lucide-react";
 import useTranslation from "next-translate/useTranslation";
@@ -14,12 +15,45 @@ import { useQuery } from "react-query";
 import { useUser } from "../../store/session";
 
 async function getUserTickets(token: any) {
-  const res = await fetch(`/api/v1/tickets/all`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return res.json();
+  try {
+    console.log("Fetching tickets from /api/v1/tickets/filtered");
+    const res = await fetch(`/api/v1/tickets/filtered`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    
+    if (!res.ok) {
+      console.error(`Error response from server: ${res.status} ${res.statusText}`);
+      try {
+        const errorData = await res.json();
+        console.error("Error details:", errorData);
+        return { tickets: [], error: errorData };
+      } catch (parseError) {
+        console.error("Could not parse error response:", parseError);
+        return { tickets: [], error: { message: `Server error: ${res.status} ${res.statusText}` } };
+      }
+    }
+    
+    try {
+      const data = await res.json();
+      console.log("Filtered tickets response:", data);
+      
+      // Ensure tickets is always an array
+      if (!data.tickets) {
+        console.warn("Response missing tickets array, defaulting to empty array");
+        data.tickets = [];
+      }
+      
+      return data;
+    } catch (parseError) {
+      console.error("Error parsing response:", parseError);
+      return { tickets: [], error: { message: "Could not parse server response" } };
+    }
+  } catch (error) {
+    console.error("Failed to fetch filtered tickets:", error);
+    return { tickets: [], error: { message: error.message || "Network error" } };
+  }
 }
 
 export default function Tickets() {
@@ -29,12 +63,27 @@ export default function Tickets() {
   const token = getCookie("session");
   const user = useUser();
   
+  // State for error handling
+  const [error, setError] = useState<string | null>(null);
+  
   // Fetch tickets data
   const { data, status, refetch } = useQuery(
     "allusertickets",
     () => getUserTickets(token),
     {
       refetchInterval: 5000,
+      onError: (err: any) => {
+        console.error("Query error:", err);
+        setError(err.message || "Failed to fetch tickets");
+      },
+      onSuccess: (data: any) => {
+        if (data.error) {
+          console.error("Data contains error:", data.error);
+          setError(data.error.message || "Error in response data");
+        } else {
+          setError(null);
+        }
+      }
     }
   );
 
@@ -48,7 +97,7 @@ export default function Tickets() {
     handleAssigneeToggle,
     clearFilters,
     filteredTickets
-  } = useTicketFilters(data?.tickets);
+  } = useTicketFilters(data?.tickets || []);
 
   const {
     viewMode,
@@ -117,6 +166,15 @@ export default function Tickets() {
 
   if (status === "loading") {
     return <Loader className="animate-spin" />;
+  }
+  
+  if (status === "error" || error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="text-red-500 mb-4">Error loading tickets: {error}</div>
+        <Button onClick={() => refetch()}>Retry</Button>
+      </div>
+    );
   }
 
   return (

@@ -7,7 +7,7 @@ export function dataRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/data/tickets/all",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const result = await prisma.ticket.count({
@@ -22,7 +22,7 @@ export function dataRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/data/tickets/completed",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const result = await prisma.ticket.count({
@@ -37,7 +37,7 @@ export function dataRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/data/tickets/open",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const result = await prisma.ticket.count({
@@ -52,7 +52,7 @@ export function dataRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/data/tickets/unassigned",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const result = await prisma.ticket.count({

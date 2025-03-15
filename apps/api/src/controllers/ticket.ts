@@ -33,7 +33,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/ticket/create",
     {
-      preHandler: requirePermission(["issue::create"]),
+      preHandler: requirePermission(["task::create"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const {
@@ -249,7 +249,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/ticket/:id",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
@@ -318,7 +318,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/tickets/open",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const tickets = await prisma.ticket.findMany({
@@ -352,7 +352,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/tickets/search",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { query }: any = request.body;
@@ -486,7 +486,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/ticket/update",
     {
-      preHandler: requirePermission(["issue::update"]),
+      preHandler: requirePermission(["task::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id, note, detail, title, priority, status, client }: any =
@@ -527,7 +527,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/ticket/transfer",
     {
-      preHandler: requirePermission(["issue::transfer"]),
+      preHandler: requirePermission(["task::transfer"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { user, id }: any = request.body;
@@ -573,7 +573,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/ticket/transfer/client",
     {
-      preHandler: requirePermission(["issue::transfer"]),
+      preHandler: requirePermission(["task::transfer"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { client, id }: any = request.body;
@@ -649,7 +649,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/ticket/comment",
     {
-      preHandler: requirePermission(["issue::comment"]),
+      preHandler: requirePermission(["task::comment"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { text, id, public: public_comment }: any = request.body;
@@ -695,7 +695,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/ticket/comment/delete",
     {
-      preHandler: requirePermission(["issue::comment"]),
+      preHandler: requirePermission(["task::comment"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.body;
@@ -716,7 +716,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/ticket/status/update",
     {
-      preHandler: requirePermission(["issue::update"]),
+      preHandler: requirePermission(["task::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { status, id }: any = request.body;
@@ -784,7 +784,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/ticket/status/hide",
     {
-      preHandler: requirePermission(["issue::update"]),
+      preHandler: requirePermission(["task::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { hidden, id }: any = request.body;
@@ -806,7 +806,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.put(
     "/api/v1/ticket/status/lock",
     {
-      preHandler: requirePermission(["issue::update"]),
+      preHandler: requirePermission(["task::update"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { locked, id }: any = request.body;
@@ -828,7 +828,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.post(
     "/api/v1/ticket/delete",
     {
-      preHandler: requirePermission(["issue::delete"]),
+      preHandler: requirePermission(["task::delete"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.body;
@@ -983,7 +983,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/tickets/user/external",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const user = await checkSession(request);
@@ -1014,7 +1014,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/ticket/subscribe/:id",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
@@ -1060,7 +1060,7 @@ export function ticketRoutes(fastify: FastifyInstance) {
   fastify.get(
     "/api/v1/ticket/unsubscribe/:id",
     {
-      preHandler: requirePermission(["issue::read"]),
+      preHandler: requirePermission(["task::read"]),
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;

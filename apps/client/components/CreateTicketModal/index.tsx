@@ -212,7 +212,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
               <div className="inline-block bg-background rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 align-middle md:max-w-3xl w-full ">
                 <div className="flex flex-row w-full align-middle">
                   <span className="text-md pb-2 font-semibold text-sm">
-                    New Issue
+                    New Task
                   </span>
 
                   <button
@@ -227,7 +227,7 @@ export default function CreateTicketModal({ keypress, setKeyPressDown }) {
                 <input
                   type="text"
                   name="title"
-                  placeholder="Issue title"
+                  placeholder="Task title"
                   maxLength={64}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full pl-0 pr-0 pt-0 text-md text-foreground bg-background border-none focus:outline-none focus:shadow-none focus:ring-0 focus:border-none"

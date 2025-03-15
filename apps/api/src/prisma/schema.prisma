@@ -70,6 +70,7 @@ model Role {
   isDefault   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
+  group       RoleGroup? @default(tasker)
   users       User[]
 }
 
@@ -440,4 +441,10 @@ enum Template {
   ticket_status_changed
   ticket_assigned
   ticket_comment
+}
+
+enum RoleGroup {
+  owner
+  tasker
+  coordinator
 }

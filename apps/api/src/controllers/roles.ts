@@ -13,7 +13,7 @@ export function roleRoutes(fastify: FastifyInstance) {
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const user = await checkSession(request);
-      const { name, description, permissions, isDefault }: any = request.body;
+      const { name, description, permissions, isDefault, group }: any = request.body;
 
       const existingRole = await prisma.role.findUnique({
         where: { name },
@@ -32,6 +32,7 @@ export function roleRoutes(fastify: FastifyInstance) {
           description,
           permissions,
           isDefault: isDefault || false,
+          group: group || "tasker",
         },
       });
 
@@ -104,7 +105,7 @@ export function roleRoutes(fastify: FastifyInstance) {
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { id }: any = request.params;
-      const { name, description, permissions, isDefault, users }: any =
+      const { name, description, permissions, isDefault, users, group }: any =
         request.body;
 
       try {
@@ -115,6 +116,7 @@ export function roleRoutes(fastify: FastifyInstance) {
             description,
             permissions,
             isDefault,
+            group,
             updatedAt: new Date(),
             users: {
               set: Array.isArray(users)
@@ -230,6 +232,42 @@ export function roleRoutes(fastify: FastifyInstance) {
           });
         }
         throw error;
+      }
+    }
+  );
+
+  // Get all roles for a specific user
+  fastify.get(
+    "/api/v1/user/:userId/roles",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      try {
+        const { userId } = request.params as { userId: string };
+        
+        const user = await prisma.user.findUnique({
+          where: { id: userId },
+          include: {
+            roles: true,
+          },
+        });
+
+        if (!user) {
+          return reply.status(404).send({
+            message: "User not found",
+            success: false,
+          });
+        }
+
+        reply.status(200).send({
+          roles: user.roles,
+          success: true,
+        });
+      } catch (error: any) {
+        console.error("Error fetching user roles:", error);
+        reply.status(500).send({
+          message: "Internal server error",
+          error: error.message,
+          success: false,
+        });
       }
     }
   );

@@ -39,7 +39,9 @@ async function getUserTickets(token: any) {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res.json();
+  const data = await res.json();
+  console.log("API Response for open tickets:", data);
+  return data;
 }
 
 const FilterBadge = ({
@@ -76,7 +78,14 @@ export default function Tickets() {
     }
   );
 
+  console.log("Query status:", status);
+  console.log("Query error:", error);
+  console.log("Query data:", data);
+  console.log("Raw tickets before filtering:", data?.tickets);
+  console.log("Number of tickets before filtering:", data?.tickets?.length);
+
   const user = useUser();
+  console.log("Current user:", user);
 
   const high = "bg-red-100 text-red-800";
   const low = "bg-blue-100 text-blue-800";
@@ -151,8 +160,9 @@ export default function Tickets() {
     );
   };
 
-  const filteredTickets = data
+  const filteredTickets = data && data.tickets
     ? data.tickets.filter((ticket) => {
+        console.log("Filtering ticket:", ticket);
         const priorityMatch =
           selectedPriorities.length === 0 ||
           selectedPriorities.includes(ticket.priority);
@@ -163,9 +173,12 @@ export default function Tickets() {
           selectedAssignees.length === 0 ||
           selectedAssignees.includes(ticket.assignedTo?.name || "Unassigned");
 
+        console.log("Priority match:", priorityMatch, "Status match:", statusMatch, "Assignee match:", assigneeMatch);
         return priorityMatch && statusMatch && assigneeMatch;
       })
     : [];
+
+  console.log("Filtered tickets:", filteredTickets);
 
   type FilterType = "priority" | "status" | "assignee" | null;
   const [activeFilter, setActiveFilter] = useState<FilterType>(null);

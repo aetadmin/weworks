@@ -130,10 +130,30 @@ export default function Roles() {
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2">
                           <strong>{role.name}</strong>
+                          {role.group && (
+                            <span className={`px-2 py-0.5 text-xs rounded ${
+                              role.group === 'owner' 
+                                ? 'bg-purple-100 text-purple-800' 
+                                : (role.group === 'tasker' 
+                                  ? 'bg-blue-100 text-blue-800' 
+                                  : 'bg-green-100 text-green-800')
+                            }`}>
+                              {role.group.charAt(0).toUpperCase() + role.group.slice(1)}
+                            </span>
+                          )}
                         </div>
                         <span className="text-xs text-gray-500">
                           ID: {role.id}
                         </span>
+                        {role.group && (
+                          <span className="text-xs text-gray-500">
+                            {role.group === 'owner' 
+                              ? 'Can only see issues created by themselves' 
+                              : role.group === 'tasker' 
+                              ? 'Can see issues assigned to them or created by them' 
+                              : 'Can see all issues'}
+                          </span>
+                        )}
                       </div>
                       <div className="flex gap-2">
                         {/* <button

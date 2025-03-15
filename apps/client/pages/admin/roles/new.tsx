@@ -16,6 +16,7 @@ export default function Roles() {
   const [users, setUsers] = useState<Array<{ id: string; email: string }>>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [roleGroup, setRoleGroup] = useState<string>("tasker");
   const router = useRouter();
 
   const handleAddRole = async () => {
@@ -31,6 +32,7 @@ export default function Roles() {
         name: roleName,
         permissions: selectedPermissions,
         users: selectedUsers,
+        group: roleGroup,
       }),
     })
       .then((res) => res.json())
@@ -100,192 +102,204 @@ export default function Roles() {
   );
 
   return (
-    <div className="p-4">
-      <div className="mb-6">
-        <div className="flex items-center">
-          <div
-            className={`flex items-center ${
-              step === 1 ? "text-blue-600" : "text-gray-500"
-            }`}
-          >
-            <div
-              className={`rounded-full h-8 w-8 flex items-center justify-center border-2 ${
-                step === 1
-                  ? "border-blue-600 bg-blue-600 text-white"
-                  : "border-gray-300"
-              }`}
-            >
-              1
-            </div>
-            <span className="ml-2">Configure Role</span>
-          </div>
-          <div
-            className={`flex-1 h-0.5 mx-4 ${
-              step === 2 ? "bg-blue-600" : "bg-gray-300"
-            }`}
-          ></div>
-          <div
-            className={`flex items-center ${
-              step === 2 ? "text-blue-600" : "text-gray-500"
-            }`}
-          >
-            <div
-              className={`rounded-full h-8 w-8 flex items-center justify-center border-2 ${
-                step === 2
-                  ? "border-blue-600 bg-blue-600 text-white"
-                  : "border-gray-300"
-              }`}
-            >
-              2
-            </div>
-            <span className="ml-2">Select Users</span>
-          </div>
-        </div>
+    <div className="container mx-auto py-10">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Create New Role</h1>
       </div>
 
-      {step === 1 ? (
-        <Card>
-          <CardHeader>
-            <div className="flex flex-row justify-between items-center">
-              <Input
-                placeholder="Role Name"
-                value={roleName}
-                className="w-1/4"
-                onChange={(e) => setRoleName(e.target.value)}
-              />
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-                onClick={() => setStep(2)}
-                disabled={!roleName}
-              >
-                Next
-              </button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-2">Select Permissions</h3>
-              {PERMISSIONS_CONFIG.map((group) => (
-                <div key={group.category} className="mb-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className="font-medium">{group.category}</h4>
-                    <label className="flex items-center space-x-2 text-sm text-gray-600">
-                      <input
-                        type="checkbox"
-                        checked={isCategoryFullySelected(group.category)}
-                        onChange={(e) =>
-                          handleSelectCategory(group.category, e.target.checked)
-                        }
-                        className="rounded"
-                      />
-                      <span>Select All</span>
-                    </label>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {group.permissions.map((permission) => (
+      <div className="grid grid-cols-1 gap-6">
+        {step === 1 && (
+          <Card>
+            <CardHeader>
+              <div className="flex flex-row justify-between items-center">
+                <CardTitle>Role Details</CardTitle>
+                <div className="flex gap-2">
+                  <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded"
+                    onClick={() => setStep(2)}
+                    disabled={!roleName}
+                  >
+                    Next: Select Users
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-green-500 text-white rounded"
+                    onClick={handleAddRole}
+                    disabled={!roleName}
+                  >
+                    Save Role
+                  </button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <label
+                    htmlFor="roleName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Role Name
+                  </label>
+                  <Input
+                    id="roleName"
+                    value={roleName}
+                    onChange={(e) => setRoleName(e.target.value)}
+                    className="mt-1"
+                    placeholder="Enter role name"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="roleGroup"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Role Group
+                  </label>
+                  <select
+                    id="roleGroup"
+                    value={roleGroup}
+                    onChange={(e) => setRoleGroup(e.target.value)}
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                  >
+                    <option value="owner">Owner</option>
+                    <option value="tasker">Tasker (Engineer)</option>
+                    <option value="coordinator">Coordinator</option>
+                  </select>
+                  <p className="mt-2 text-sm text-gray-500">
+                    Owner: Can only see issues created by themselves<br />
+                    Tasker: Can see issues assigned to them or created by them<br />
+                    Coordinator: Can see all issues
+                  </p>
+                </div>
+
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold mb-2">Select Permissions</h3>
+                  {PERMISSIONS_CONFIG.map((group) => (
+                    <div key={group.category} className="mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="font-medium">{group.category}</h4>
+                        <label className="flex items-center space-x-2 text-sm text-gray-600">
+                          <input
+                            type="checkbox"
+                            checked={isCategoryFullySelected(group.category)}
+                            onChange={(e) =>
+                              handleSelectCategory(group.category, e.target.checked)
+                            }
+                            className="rounded"
+                          />
+                          <span>Select All</span>
+                        </label>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        {group.permissions.map((permission) => (
+                          <label
+                            key={permission}
+                            className="flex items-center space-x-2"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedPermissions.includes(permission)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setSelectedPermissions([
+                                    ...selectedPermissions,
+                                    permission,
+                                  ]);
+                                } else {
+                                  setSelectedPermissions(
+                                    selectedPermissions.filter(
+                                      (p) => p !== permission
+                                    )
+                                  );
+                                }
+                              }}
+                            />
+                            <span>{permission}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {step === 2 && (
+          <Card>
+            <CardHeader>
+              <div className="flex flex-row justify-between items-center">
+                <CardTitle>Select Users</CardTitle>
+                <div className="flex gap-2">
+                  <button
+                    className="px-4 py-2 bg-gray-500 text-white rounded"
+                    onClick={() => setStep(1)}
+                  >
+                    Back
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-green-500 text-white rounded"
+                    onClick={handleAddRole}
+                    disabled={isLoading}
+                  >
+                    Create Role
+                  </button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <div className="relative mb-4">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+                  <Input
+                    placeholder="Search users..."
+                    className="pl-8"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+
+                {isLoading ? (
+                  <div className="text-center py-4">Loading users...</div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {filteredUsers.map((user) => (
                       <label
-                        key={permission}
-                        className="flex items-center space-x-2"
+                        key={user.id}
+                        className="flex items-center space-x-2 p-2 border rounded hover:bg-gray-50"
                       >
                         <input
                           type="checkbox"
-                          checked={selectedPermissions.includes(permission)}
+                          checked={selectedUsers.includes(user.id)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setSelectedPermissions([
-                                ...selectedPermissions,
-                                permission,
-                              ]);
+                              setSelectedUsers([...selectedUsers, user.id]);
                             } else {
-                              setSelectedPermissions(
-                                selectedPermissions.filter(
-                                  (p) => p !== permission
-                                )
+                              setSelectedUsers(
+                                selectedUsers.filter((id) => id !== user.id)
                               );
                             }
                           }}
+                          className="rounded"
                         />
-                        <span>{permission}</span>
+                        <span className="flex-1">{user.email}</span>
                       </label>
                     ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <div className="flex flex-row justify-between items-center">
-              <CardTitle>Select Users</CardTitle>
-              <div className="flex gap-2">
-                <button
-                  className="px-4 py-2 bg-gray-500 text-white rounded"
-                  onClick={() => setStep(1)}
-                >
-                  Back
-                </button>
-                <button
-                  className="px-4 py-2 bg-green-500 text-white rounded"
-                  onClick={handleAddRole}
-                  disabled={isLoading}
-                >
-                  Create Role
-                </button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="mb-4">
-              <div className="relative mb-4">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-                <Input
-                  placeholder="Search users..."
-                  className="pl-8"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+                )}
 
-              {isLoading ? (
-                <div className="text-center py-4">Loading users...</div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {filteredUsers.map((user) => (
-                    <label
-                      key={user.id}
-                      className="flex items-center space-x-2 p-2 border rounded hover:bg-gray-50"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selectedUsers.includes(user.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedUsers([...selectedUsers, user.id]);
-                          } else {
-                            setSelectedUsers(
-                              selectedUsers.filter((id) => id !== user.id)
-                            );
-                          }
-                        }}
-                        className="rounded"
-                      />
-                      <span className="flex-1">{user.email}</span>
-                    </label>
-                  ))}
-                </div>
-              )}
-
-              {!isLoading && filteredUsers.length === 0 && (
-                <div className="text-center py-4 text-gray-500">
-                  {searchTerm ? "No users found" : "No users available"}
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                {!isLoading && filteredUsers.length === 0 && (
+                  <div className="text-center py-4 text-gray-500">
+                    {searchTerm ? "No users found" : "No users available"}
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   );
 }

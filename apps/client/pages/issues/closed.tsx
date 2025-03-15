@@ -142,7 +142,7 @@ export default function Tickets() {
     );
   };
 
-  const filteredTickets = data
+  const filteredTickets = data && data.tickets
     ? data.tickets.filter((ticket) => {
         const priorityMatch =
           selectedPriorities.length === 0 ||

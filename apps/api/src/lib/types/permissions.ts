@@ -1,12 +1,12 @@
-export type IssuePermission =
-  | 'issue::create'
-  | 'issue::read'
-  | 'issue::write'
-  | 'issue::update'
-  | 'issue::delete'
-  | 'issue::assign'
-  | 'issue::transfer'
-  | 'issue::comment';
+export type TaskPermission =
+  | 'task::create'
+  | 'task::read'
+  | 'task::write'
+  | 'task::update'
+  | 'task::delete'
+  | 'task::assign'
+  | 'task::transfer'
+  | 'task::comment';
 
 export type UserPermission =
   | 'user::create'
@@ -74,7 +74,7 @@ export type DocumentPermission =
   | 'document::manage';
 
 export type Permission =
-  | IssuePermission
+  | TaskPermission
   | UserPermission
   | RolePermission
   | TeamPermission
@@ -88,7 +88,7 @@ export type Permission =
 
 // Useful type for grouping permissions by category
 export const PermissionCategories = {
-  ISSUE: 'Issue Management',
+  TASK: 'Task Management',
   USER: 'User Management',
   ROLE: 'Role Management',
   TEAM: 'Team Management',

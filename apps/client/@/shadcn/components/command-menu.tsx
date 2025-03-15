@@ -186,15 +186,15 @@ export function CommandMenu() {
           <CommandGroup heading="Navigation">
             <CommandItem onSelect={() => router.push("/issues")}>
               <Circle className="mr-2 h-4 w-4" />
-              <span>All Issues</span>
+              <span>All Tasks</span>
             </CommandItem>
             <CommandItem onSelect={() => router.push("/issues/open")}>
               <Circle className="mr-2 h-4 w-4" />
-              <span>Open Issues</span>
+              <span>Open Tasks</span>
             </CommandItem>
             <CommandItem onSelect={() => router.push("/issues/closed")}>
               <CheckCircle2 className="mr-2 h-4 w-4" />
-              <span>Closed Issues</span>
+              <span>Closed Tasks</span>
             </CommandItem>
             <CommandItem
               onSelect={() =>
@@ -204,7 +204,7 @@ export function CommandMenu() {
               }
             >
               <Plus className="mr-2 h-4 w-4" />
-              <span>Create New Issue</span>
+              <span>Create New Task</span>
             </CommandItem>
           </CommandGroup>
 

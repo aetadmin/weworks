@@ -14,6 +14,7 @@ export default function UpdateRole() {
   const [users, setUsers] = useState<Array<{ id: string; email: string }>>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [roleGroup, setRoleGroup] = useState<string>("tasker");
   const router = useRouter();
   const { id } = router.query;
 
@@ -32,6 +33,9 @@ export default function UpdateRole() {
         setRoleName(data.role.name);
         setSelectedPermissions(data.role.permissions);
         setSelectedUsers(data.role.users.map((u: any) => u.id));
+        if (data.role.group) {
+          setRoleGroup(data.role.group);
+        }
       }
     } catch (error) {
       console.error("Error fetching role:", error);
@@ -71,6 +75,7 @@ export default function UpdateRole() {
         name: roleName,
         permissions: selectedPermissions,
         users: selectedUsers,
+        group: roleGroup,
       }),
     })
       .then((res) => res.json())
@@ -147,6 +152,28 @@ export default function UpdateRole() {
           </CardHeader>
           <CardContent>
             <div className="mb-4">
+              <label
+                htmlFor="roleGroup"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Role Group
+              </label>
+              <select
+                id="roleGroup"
+                value={roleGroup}
+                onChange={(e) => setRoleGroup(e.target.value)}
+                className="mb-4 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              >
+                <option value="owner">Owner</option>
+                <option value="tasker">Tasker (Engineer)</option>
+                <option value="coordinator">Coordinator</option>
+              </select>
+              <p className="mt-2 mb-4 text-sm text-gray-500">
+                Owner: Can only see issues created by themselves<br />
+                Tasker: Can see issues assigned to them or created by them<br />
+                Coordinator: Can see all issues
+              </p>
+              
               <h3 className="text-lg font-semibold mb-2">Select Permissions</h3>
               {PERMISSIONS_CONFIG.map((group) => (
                 <div key={group.category} className="mb-4">
